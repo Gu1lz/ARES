@@ -29,7 +29,3 @@ O Ares Marketing & Automatizações é uma ferramenta de software projetada para
 
 Contribuições são bem-vindas! Para propor novos recursos, relatar bugs ou enviar solicitações de pull, por favor, abra uma issue neste repositório.
 
-## Licença
-
-Este projeto é licenciado sob a [MIT License](LICENSE).
-
