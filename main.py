@@ -24,14 +24,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.service import Service
-# Change this line
 
-
-###################################
 
 sessoes = {}
 
-###############################################
 
 class App:
     def __init__(self, email= "", password= "", 
@@ -58,9 +54,7 @@ class App:
                     print(Fore.RED + " " * 15 + bannerzinho)
                     time.sleep(0.05)
 
-                # Imprima o banner formatado
                 time.sleep(1)
-                # Menu com formatação de cores específicas
                 menu = [
                     f"",
                     f"{Fore.YELLOW}Para sair utilize a tecla CTRL+C{Fore.RESET} "
@@ -80,7 +74,7 @@ class App:
                 with open('marketplace_options.json', encoding='utf-8') as f:
                     self.marketplace_options = json.load(f)
                     self.marketplace_options = self.marketplace_options[self.language]
-                # To remove the pop up notification window
+               
                 chrome_options = Options()
                 chrome_options.binary_location = binary_location
                 chrome_options.add_argument("--disable-notifications")
@@ -94,7 +88,6 @@ class App:
                 with open(os.devnull, 'w') as null_file:
                     sys.stdout, sys.stderr = null_file, null_file
 
-                        # Inicializar o driver
                     self.driver = webdriver.Chrome(executable_path=driver_location, options=chrome_options)
                     
                 sys.stdout = original_stdout
@@ -128,9 +121,8 @@ class App:
                 print(f"{Fore.YELLOW}Programa interrompido pelo usuário. Aguarde para voltar {Fore.RESET}")
                 
             finally:
-                # Este bloco será sempre executado, independentemente de ocorrer uma exceção ou não
                 self.driver.quit()
-                # Agora saia do programa
+             
             
     def log_in(self):
         email_input = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, "email")))
@@ -150,10 +142,8 @@ class App:
         fotos = os.path.join(script_directory, "fotos")
         image_path = os.path.join(fotos, folder)
 
-        # Lista de extensões de arquivo a serem aceitas
         extensoes_permitidas = ['.jpeg', '.jpg', '.png']
 
-        # Buscar arquivos para cada extensão individualmente
         arquivos_imagem = []
         for extensao in extensoes_permitidas:
             padrao_busca = os.path.join(image_path, '*' + extensao)
@@ -298,7 +288,7 @@ class App:
             print(f"{Fore.GREEN}ID do excel apagado{Fore.RESET}")
         except Exception as e:
             print(f"Erro: {e}")
-        ##############################
+   
         try:
             pasta_desejada = "fotos"
             script_directory = get_script_folder()
@@ -309,11 +299,8 @@ class App:
         except Exception as e:
             print(f"Erro: {e}")
 
-
-##############################################
             
 def get_script_folder():
-    # path of main .py or .exe when converted with pyinstaller
     if getattr(sys, 'frozen', False):
         script_path = os.path.dirname(sys.executable)
     else:
@@ -327,7 +314,6 @@ def depedencias():
     script_directory = get_script_folder()
     config_file_path = os.path.join(script_directory, 'config.ini')
 
-    # Se o arquivo config.ini já existir, não há necessidade de criar novamente
     if os.path.exists(config_file_path):
         return
 
@@ -342,14 +328,13 @@ def depedencias():
 
     images_path = os.path.join(script_directory, 'fotos\\')
 
-    # Use barras invertidas duplas e aspas duplas para o caminho do executável do Firefox
     binary_location = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
 
     config['CONFIG'] = {
         'language': 'pt',
         'images_path': images_path,
         'binary_location': binary_location,
-        'driver_location': 'chromedriver.exe',  # Update to the correct ChromeDriver executable
+        'driver_location': 'chromedriver.exe',  
         'time_to_sleep': '0.6'
     }
 
@@ -362,7 +347,6 @@ def depedencias():
     if os.path.exists(caminho_pasta) and os.path.isdir(caminho_pasta):
         return
     else:
-        # Cria a pasta se ela não existir
         os.makedirs(caminho_pasta)
 
     nome_arquivo_excel = 'data.xlsx'
@@ -370,12 +354,9 @@ def depedencias():
     if os.path.exists(nome_arquivo_excel):
         return
     else:
-        # Se o arquivo não existir, criar o DataFrame
         df = pd.DataFrame(columns=['id', 'titulo', 'preço', 'categoria', 'estado', 'tipo', 'opção', 'descrição', 'diretorio', 'grupos'])
 
-        # Salvar o DataFrame no arquivo Excel
         df.to_excel(nome_arquivo_excel, sheet_name="ARES" ,index=False)
-###################################################################################
         
 def config():
     script_directory = get_script_folder()
@@ -402,7 +383,7 @@ def config():
             'language': 'pt',
             'images_path': images_path,
             'binary_location': binary_location,
-            'driver_location': 'chromedriver.exe',  # Update to the correct ChromeDriver executable
+            'driver_location': 'chromedriver.exe', 
             'time_to_sleep': '0.6'
     }    
 
@@ -413,36 +394,28 @@ def config():
 
 def excluir():
     try:
-        # Especifique o nome da pasta da qual deseja excluir pastas
         pasta_desejada = "fotos"
 
-        # Obtenha o diretório atual do script
         script_directory = get_script_folder()
-        # Crie o caminho completo para a pasta desejada
         caminho_pasta_desejada = os.path.join(script_directory, pasta_desejada)
 
-        # Verifique se a pasta existe
         if os.path.exists(caminho_pasta_desejada):
-            os.chdir(caminho_pasta_desejada)  # Entre na pasta existente
+            os.chdir(caminho_pasta_desejada) 
 
-            # Encontre todas as pastas numeradas
             pastas_existentes = [pasta for pasta in os.listdir() if os.path.isdir(pasta)]
             pastas_numeradas = [pasta for pasta in pastas_existentes if pasta.isdigit()]
 
             if pastas_numeradas:
-                # Pergunte ao usuário quantas pastas numeradas deseja excluir
                 while True:
                     try:
                         quantidade_pastas_a_excluir = int(input(f"{Fore.RED}>{Fore.RESET} "))
-                        break  # Sai do loop se um número inteiro for inserido com sucesso
+                        break  
                     except ValueError:
                         print("{Fore.YELLOW}Isso não é um número. Tente novamente{Fore.RESET}")
 
-                # Limitar a quantidade de pastas a excluir com base na entrada do usuário
                 pastas_a_excluir = pastas_numeradas[:quantidade_pastas_a_excluir]
 
                 if pastas_a_excluir:
-                    # Excluir as pastas numeradas
                     for pasta in pastas_a_excluir:
                         caminho_pasta_a_excluir = os.path.join(caminho_pasta_desejada, pasta)
                         shutil.rmtree(caminho_pasta_a_excluir)
@@ -458,27 +431,23 @@ def excluir():
     
 def criar():
     try:
-        # Especifique o nome da pasta que deseja verificar e criar pastas dentro
         pasta_desejada = "fotos"
         quantidade_pastas = 0
         while True:
             try:
                 quantidade_pastas = int(input(f"{Fore.RED}>{Fore.RESET} "))
-                break  # Sai do loop se um número inteiro for inserido com sucesso
+                break  
             except ValueError:
                 print("Isso não é um número. Tente novamente")
 
-        # Obtenha o diretório atual do script
         script_directory = get_script_folder()
 
-        # Crie o caminho completo para a pasta desejada
+     
         caminho_pasta_desejada = os.path.join(script_directory, pasta_desejada)
 
-        # Verifique se a pasta já existe
         if os.path.exists(caminho_pasta_desejada):
-            os.chdir(caminho_pasta_desejada)  # Entre na pasta existente
+            os.chdir(caminho_pasta_desejada)  
 
-            # Encontre a última pasta numerada, se existir
             pastas_existentes = [pasta for pasta in os.listdir() if os.path.isdir(pasta)]
             pastas_numeradas = [pasta for pasta in pastas_existentes if pasta.startswith('pasta_')]
 
@@ -491,11 +460,10 @@ def criar():
 
         else:
             os.makedirs(caminho_pasta_desejada)
-            os.chdir(caminho_pasta_desejada)  # Entre na pasta recém-criada
+            os.chdir(caminho_pasta_desejada)  
             print(f"{Fore.YELLOW}Pasta Criada {Fore.RESET}")
             numero_ultima_pasta = 0
 
-        # Crie pastas numeradas a partir da próxima
         for i in range(numero_ultima_pasta + 1, numero_ultima_pasta + quantidade_pastas + 1):
             nome_pasta = f'{i}'
             if not os.path.exists(nome_pasta):
@@ -527,9 +495,9 @@ def menu():
         for bannerzinho in banner:
             print(Fore.RED +" " * 15+ bannerzinho)
             time.sleep(0.05) 
-        # Imprima o banner formatado
+     
         time.sleep(1)
-        # Menu com formatação de cores específicas
+        
         menu = [
         f"",
         f"{Fore.GREEN}Seja Bem-Vindo ao ARES!{Fore.RESET}",
@@ -550,7 +518,6 @@ def menu():
             time.sleep(0.05)
             
         thread.join()
-        # Receber entrada do usuário com ">" em vermelho
 
         while True:
             
@@ -572,14 +539,13 @@ def menu():
             elif escolha == '4':
                 config()
             elif escolha == '5':
-                    # Execute a terceira ação
-                break  # Sai do loop se a escolha for válida
+                  
+                break  
             else:
                 print("Escolha inválida. Tente novamente.")
     except Exception as erro:            
         print(f"{Fore.RED}ERRO LOCALIZADO, TENTE NOVAMENTE ERRO:{erro}{Fore.RESET}")
 
-##################################################
 if __name__ == "__main__":
     init()
     time.sleep(1)
